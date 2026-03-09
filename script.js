@@ -94,3 +94,64 @@ function erase() {
 document.addEventListener("DOMContentLoaded", function() { // On DOM Load initiate the effect
     if(textArray.length) setTimeout(type, newTextDelay + 250);
 });
+
+// Custom Cursor Logic
+const cursor = document.querySelector('.custom-cursor');
+const cursorFollower = document.querySelector('.custom-cursor-follower');
+
+document.addEventListener('mousemove', (e) => {
+    if (cursor && cursorFollower) {
+        // Direct follow for dot
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+        
+        // Slight delay for ring
+        setTimeout(() => {
+            cursorFollower.style.left = e.clientX + 'px';
+            cursorFollower.style.top = e.clientY + 'px';
+        }, 80);
+    }
+});
+
+// Add hover states to interactive elements
+const interactiveElements = document.querySelectorAll('a, button, input, textarea, .project-card, .hamburger');
+
+interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+        if(cursor) cursor.classList.add('hover');
+        if(cursorFollower) cursorFollower.classList.add('hover');
+    });
+    
+    el.addEventListener('mouseleave', () => {
+        if(cursor) cursor.classList.remove('hover');
+        if(cursorFollower) cursorFollower.classList.remove('hover');
+    });
+});
+
+// Scroll Reveal Animations using Intersection Observer
+const revealElements = document.querySelectorAll('.section-title, .about-text, .skill-category, .project-card, .contact-content');
+
+// Add base classes
+revealElements.forEach(el => {
+    el.classList.add('fade-in');
+});
+
+const revealOptions = {
+    threshold: 0.15,
+    rootMargin: "0px 0px -50px 0px"
+};
+
+const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+    entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+            return;
+        } else {
+            entry.target.classList.add('appear');
+            observer.unobserve(entry.target); // Stop tracking once visible
+        }
+    });
+}, revealOptions);
+
+revealElements.forEach(el => {
+    revealOnScroll.observe(el);
+});

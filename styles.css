@@ -21,6 +21,7 @@
 
 html {
     scroll-behavior: smooth;
+    cursor: none; /* Custom cursor */
 }
 
 body {
@@ -28,6 +29,118 @@ body {
     color: var(--text-color);
     background-color: var(--bg-color);
     line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll from bg animation */
+}
+
+/* ==== Custom Cursor ==== */
+.custom-cursor {
+    position: fixed;
+    top: -50px;
+    left: -50px;
+    width: 8px;
+    height: 8px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+}
+
+.custom-cursor-follower {
+    position: fixed;
+    top: -50px;
+    left: -50px;
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease;
+}
+
+.custom-cursor.hover {
+    transform: translate(-50%, -50%) scale(1.5);
+}
+
+.custom-cursor-follower.hover {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(14, 165, 233, 0.1);
+}
+
+/* Fallback for devices without fine pointer */
+@media (pointer: coarse) {
+    html { cursor: auto; }
+    .custom-cursor, .custom-cursor-follower { display: none; }
+}
+
+/* ==== Background Animation ==== */
+.bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.shape {
+    position: absolute;
+    filter: blur(80px);
+    opacity: 0.3;
+    border-radius: 50%;
+    animation: float 20s infinite alternate ease-in-out;
+}
+
+.shape-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--primary-color);
+    top: -10%;
+    left: -10%;
+}
+
+.shape-2 {
+    width: 500px;
+    height: 500px;
+    background: #a855f7; /* Purple */
+    bottom: -10%;
+    right: -10%;
+    animation-delay: -5s;
+    animation-duration: 25s;
+}
+
+.shape-3 {
+    width: 300px;
+    height: 300px;
+    background: #3b82f6; /* Blue */
+    top: 30%;
+    left: 40%;
+    animation-delay: -10s;
+    animation-duration: 30s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(50px, 50px) scale(1.2); }
+}
+
+/* ==== Scroll Animation Classes ==== */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    will-change: opacity, transform;
+}
+
+.fade-in.appear {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 ul {
